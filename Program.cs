@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
+var corsPolicyName = "CollegeAppPolicy";
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<CollegeDBContext>(options =>
 {
@@ -53,6 +54,12 @@ builder.Services.AddScoped<IMyLogger, LogToFile>();
 builder.Services.AddTransient<IStudentRepository, StudentRepository>();
 builder.Services.AddTransient(typeof(ICollegeRepository<>), typeof(CollegeRepository<>));
 
+builder.Services.AddCors(options => options.AddPolicy(corsPolicyName, policy =>
+{
+    //Allow all origins
+    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+}));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -64,6 +71,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(corsPolicyName);
 
 app.UseAuthorization();
 

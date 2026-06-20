@@ -1,12 +1,7 @@
 ﻿namespace CollegeApp.Data.Repository
 {
-    public interface IStudentRepository
+    public interface IStudentRepository : ICollegeRepository<Student>
     {
-        Task<List<Student>> GetAllStudentsAsync();
-        Task<Student> GetStudentByIdAsync(int id, bool useNoTracking = false);
-
-        Task<int> CreateStudentAsync(Student student);
-        Task<int> UpdateStudentAsync(Student student);
-        Task<bool> DeleteStudentAsync(Student student);
+        Task<Student> GetStudentByFeeStatusAsync(int id);
     }
 }

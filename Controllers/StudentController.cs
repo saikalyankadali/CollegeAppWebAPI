@@ -20,9 +20,9 @@ namespace CollegeApp.Controllers
     {
         private readonly ILogger<StudentController> _myLogger;
         private readonly IMapper _mapper;
-        private readonly ICollegeRepository<Student> _studentRepository;
+        private readonly IStudentRepository _studentRepository;
 
-        public StudentController(ILogger<StudentController> myLogger, IMapper mapper, ICollegeRepository<Student> studentRepository)
+        public StudentController(ILogger<StudentController> myLogger, IMapper mapper, IStudentRepository studentRepository)
         { 
             this._myLogger = myLogger;
             this._mapper = mapper;
