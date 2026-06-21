@@ -15,17 +15,14 @@ CollegeApp lets an authenticated administrator manage student records — create
 
 ## Repository Structure
 
+```
 CollegeApp/
-
-├── CollegeAppWebAPI/     # ASP.NET Core Web API (backend)
-
-│   └── README.md
-
-├── CollegeAppClient/     # Angular SPA (frontend)
-
-│   └── README.md
-
-└── README.md             # You are here
+├── CollegeAppWebAPI/           # ASP.NET Core Web API (backend)
+│   ├── README.md
+├── CollegeAppClient/           # Angular SPA (frontend)
+│   ├── README.md                    
+├── Readme.md/                  # You are here
+```
 
 ## Architecture
 
