@@ -115,7 +115,7 @@ namespace CollegeApp.Controllers
             //    Phone = model.Phone,
             //    DOB = model.DOB
             //};
-            var student = _mapper.Map<Student>(existingRecord);
+            var student = _mapper.Map<Student>(model);
             await _studentRepository.UpdateStudentAsync(student);
             //existingRecord.Name = model.Name;
             //existingRecord.Email = model.Email;

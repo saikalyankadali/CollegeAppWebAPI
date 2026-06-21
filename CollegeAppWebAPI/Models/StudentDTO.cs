@@ -23,5 +23,7 @@ namespace CollegeApp.Models
         public string Phone { get; set; }
 
         public DateTime DOB { get; set; }
+
+        public int? DepartmentId { get; set; }
     }
 }
