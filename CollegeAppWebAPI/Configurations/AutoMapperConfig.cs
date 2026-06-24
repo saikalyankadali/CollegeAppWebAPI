@@ -9,6 +9,8 @@ namespace CollegeApp.Configurations
         public AutoMapperConfig() 
         {
             CreateMap<Student, StudentDTO>().ForMember(n => n.StudentName, opt => opt.MapFrom(x => x.Name)).ReverseMap();
+            CreateMap<Role, RoleDTO>().ReverseMap();
+            CreateMap<RolePrivilege, RolePrivilegeDTO>().ReverseMap();
         }
     }
 }

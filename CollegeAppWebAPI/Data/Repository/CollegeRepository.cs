@@ -14,26 +14,35 @@ namespace CollegeApp.Data.Repository
             this._dbContext = dBContext;
             this.dbSet = dBContext.Set<T>();
         }
-        public async Task<T> CreateStudentAsync(T dbRecord)
+        public async Task<T> CreateAsync(T dbRecord)
         {
             await dbSet.AddAsync(dbRecord);
             await _dbContext.SaveChangesAsync();
             return dbRecord;
         }
 
-        public async Task<bool> DeleteStudentAsync(T dbRecord)
+        public async Task<bool> DeleteAsync(T dbRecord)
         {
             dbSet.Remove(dbRecord);
             await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        public async Task<List<T>> GetAllStudentsAsync()
+        public async Task<List<T>> GetAllAsync()
         {
             return await dbSet.ToListAsync();
         }
 
-        public async Task<T> GetStudentByIdAsync(Expression<Func<T, bool>> filter, bool useNoTracking = false)
+        public async Task<List<T>> GetAllByFilterAsync(Expression<Func<T, bool>> filter, bool useNoTracking = false)
+        {
+            if (useNoTracking)
+            {
+                return await dbSet.AsNoTracking().Where(filter).ToListAsync();
+            }
+            return await dbSet.Where(filter).ToListAsync();
+        }
+
+        public async Task<T> GetByIdAsync(Expression<Func<T, bool>> filter, bool useNoTracking = false)
         {
             if (useNoTracking)
             {
@@ -42,7 +51,7 @@ namespace CollegeApp.Data.Repository
             return await dbSet.Where(filter).FirstOrDefaultAsync();
         }
 
-        public async Task<T> UpdateStudentAsync(T dbRecord)
+        public async Task<T> UpdateAsync(T dbRecord)
         {
             dbSet.Update(dbRecord);
             await _dbContext.SaveChangesAsync();

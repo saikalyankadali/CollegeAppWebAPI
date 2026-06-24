@@ -65,7 +65,7 @@ namespace CollegeApp.Controllers
                 //    DOB = stu.DOB
                 //}).ToListAsync();
 
-                var students = await _studentRepository.GetAllStudentsAsync();
+                var students = await _studentRepository.GetAllAsync();
                 _apiResponse.Data = _mapper.Map<List<StudentDTO>>(students);
                 _apiResponse.Status = true;
                 _apiResponse.StatusCode = HttpStatusCode.OK;
@@ -86,7 +86,7 @@ namespace CollegeApp.Controllers
         {
             try
             {
-                var student = await _studentRepository.GetStudentByIdAsync(student => student.Id == id);
+                var student = await _studentRepository.GetByIdAsync(student => student.Id == id);
                 //StudentDTO studentDTO = new StudentDTO
                 //{
                 //    Id = student.Id,
@@ -123,7 +123,7 @@ namespace CollegeApp.Controllers
                 }
 
                 Student student = _mapper.Map<Student>(studentDto);
-                var stu = await _studentRepository.CreateStudentAsync(student);
+                var stu = await _studentRepository.CreateAsync(student);
                 studentDto.Id = stu.Id;
                 _apiResponse.Data = studentDto;
                 _apiResponse.Status = true;
@@ -152,7 +152,7 @@ namespace CollegeApp.Controllers
                     return _apiResponse;
                 }
 
-                var existingRecord = await _studentRepository.GetStudentByIdAsync(student => student.Id == model.Id, true);
+                var existingRecord = await _studentRepository.GetByIdAsync(student => student.Id == model.Id, true);
                 if (existingRecord == null)
                 {
                     _apiResponse.Status = false;
@@ -162,7 +162,7 @@ namespace CollegeApp.Controllers
                 }
 
                 var student = _mapper.Map<Student>(model);
-                await _studentRepository.UpdateStudentAsync(student);
+                await _studentRepository.UpdateAsync(student);
 
                 _apiResponse.Status = true;
                 _apiResponse.StatusCode = HttpStatusCode.NoContent;
@@ -189,7 +189,7 @@ namespace CollegeApp.Controllers
                 return _apiResponse;
             }
 
-            var existingRecord = await _studentRepository.GetStudentByIdAsync(student => student.Id == id, true);
+            var existingRecord = await _studentRepository.GetByIdAsync(student => student.Id == id, true);
             if (existingRecord == null)
             {
                 _apiResponse.Status = false;
@@ -210,7 +210,7 @@ namespace CollegeApp.Controllers
             }
 
             existingRecord = _mapper.Map<Student>(studentDTO);
-            await _studentRepository.UpdateStudentAsync(existingRecord);
+            await _studentRepository.UpdateAsync(existingRecord);
 
             _apiResponse.Status = true;
             _apiResponse.StatusCode = HttpStatusCode.NoContent;
@@ -220,7 +220,7 @@ namespace CollegeApp.Controllers
         [HttpDelete("deletestudent/{id:int}", Name = "DeleteStudentById")]
         public async Task<APIResponse> DeleteStudentByIdAsync(int id)
         {
-            var student = await _studentRepository.GetStudentByIdAsync(student => student.Id == id);
+            var student = await _studentRepository.GetByIdAsync(student => student.Id == id);
             if (student == null)
             {
                 _apiResponse.Status = false;
@@ -229,7 +229,7 @@ namespace CollegeApp.Controllers
                 return _apiResponse;
             }
 
-            var deleted = await _studentRepository.DeleteStudentAsync(student);
+            var deleted = await _studentRepository.DeleteAsync(student);
             _apiResponse.Status = deleted;
             _apiResponse.StatusCode = deleted ? HttpStatusCode.OK : HttpStatusCode.BadRequest;
             _apiResponse.Data = deleted;
@@ -247,7 +247,7 @@ namespace CollegeApp.Controllers
                 return _apiResponse;
             }
 
-            var student = await _studentRepository.GetStudentByIdAsync(student => student.Id == id);
+            var student = await _studentRepository.GetByIdAsync(student => student.Id == id);
             if (student == null)
             {
                 _apiResponse.Status = false;
