@@ -1,6 +1,6 @@
 # CollegeAppClient
 
-Frontend for CollegeApp — an Angular single-page application for managing student records. It authenticates against the CollegeAppWebAPI, stores the JWT, and provides a UI for login and full CRUD operations.
+Frontend for CollegeApp — an Angular single-page application for managing students, users, roles, and role privileges. It authenticates against the CollegeAppWebAPI, stores the JWT, and provides admin UIs over the secured REST API.
 
 ## Tech Stack
 
@@ -12,10 +12,10 @@ Frontend for CollegeApp — an Angular single-page application for managing stud
 ## Features
 
 - Login page with JWT authentication
-- View all students
-- Add a new student
-- Edit a student inline
-- Delete a student
+- **Students** — list, add, edit, and delete student records
+- **Users** — list and add users (with user type), soft delete
+- **Roles** — list, add, edit, and delete roles
+- **Role Privileges** — add and remove privileges per role
 - Automatic Bearer-token attachment via an HTTP interceptor
 - Route protection via an auth guard
 
@@ -24,23 +24,29 @@ Frontend for CollegeApp — an Angular single-page application for managing stud
 ```
 src/app/
 ├── components/
-│   ├── login/                  # Login page
-│   └── student-list/           # Student list with create, edit, delete
+│   ├── login/                # Login page
+│   ├── student-list/         # Students: list, create, edit, delete
+│   ├── users/                # Users: list, create, delete
+│   └── roles/                # Roles + per-role privileges
 ├── services/
-│   ├── auth.service.ts         # Login, token storage, session state
-│   └── student.service.ts      # Student CRUD calls
+│   ├── auth.service.ts       # Login, token storage, session state
+│   ├── student.service.ts    # Student CRUD
+│   ├── user.service.ts       # User CRUD
+│   ├── user-type.service.ts  # User type lookup
+│   ├── role.service.ts       # Role CRUD
+│   └── role-privilege.service.ts  # Role privilege add/remove
 ├── interceptors/
-│   └── auth.interceptor.ts     # Attaches the Bearer token
+│   └── auth.interceptor.ts   # Attaches the Bearer token
 ├── guards/
-│   └── auth.guard.ts           # Protects authenticated routes
-├── models/                     # Student, login, and APIResponse interfaces
-├── app.config.ts               # App providers (router, http, interceptor)
-└── app.routes.ts               # Route definitions
+│   └── auth.guard.ts         # Protects authenticated routes
+├── models/                   # Student, user, role, privilege, APIResponse interfaces
+├── app.config.ts             # App providers (router, http, interceptor)
+└── app.routes.ts             # Route definitions
 ```
 
 ## API Integration
 
-The client consumes the CollegeAppWebAPI. All responses share a common envelope, and the data payload is read from the `data` property:
+The client consumes the CollegeAppWebAPI. All responses share a common envelope, and the payload is read from the `data` property:
 
 ```json
 {
@@ -51,7 +57,7 @@ The client consumes the CollegeAppWebAPI. All responses share a common envelope,
 }
 ```
 
-Note that the API returns business failures (such as invalid credentials) with an HTTP 200 status and `status: false`, so the client checks the `status` field rather than relying solely on HTTP error codes.
+The API returns some business failures (such as invalid credentials) with an HTTP 200 status and `status: false`, so the client checks the `status` field rather than relying solely on HTTP error codes. Each service unwraps `data` on success and surfaces `errors` on logical failure.
 
 ## Getting Started
 
@@ -83,14 +89,13 @@ export const environment = {
 ng serve
 ```
 
-Open `http://localhost:4200`.
-
-**Demo credentials:** `Admin` / `Admin123`
+Open `http://localhost:4200`. Log in with a user that exists in the API's database.
 
 ## Notes
 
 - Ensure the API has CORS configured to allow `http://localhost:4200`.
 - The JWT is stored in the browser and attached to every request automatically by the interceptor.
+- Access to protected pages depends on the role carried in the JWT, which is resolved from the user's role mapping on the backend.
 
 ## Purpose
 
